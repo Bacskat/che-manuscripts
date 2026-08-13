@@ -7,27 +7,12 @@
 
 This site centers on Che Guevara's handwritten manuscripts, using restrained visuals and smooth motion to present a concrete human being rather than a symbol.
 
-## 功能特性 · Features
+## 预览 · Preview
 
-- **加载动画**：毛笔字「致敬」逐字浮现 + 红墨从左到右填充 + 进度条
-- **随机方向揭示**：加载层朝随机方向被"抽屉式"拉出，网页从反方向连成一体滑入
-- **随机语录**：随机展示切本人说过的话（中文 + 西班牙语原版），切换时带"字符解码"特效
-- **手稿传送带**：封面无缝滚动，hover / 点击弹出「预览 / 下载」菜单
-- **预览与下载**：下载带网页内实时进度条（大小 + 百分比）
-- **关于弹窗**：版权声明 + GitHub 链接（版权年份自动更新）
+### 在线预览 · Online Preview
 
-- **Loading animation**: brush-style "致敬" char-by-char reveal + red-ink fill + progress bar
-- **Random-direction reveal**: the loading layer is pulled out like a drawer in a random direction, the page slides in connected from the opposite side
-- **Random quotes**: real Che quotes (Chinese + Spanish), switching with a "character-decode" effect
-- **Manuscript marquee**: seamless scrolling covers with hover / tap "preview / download" menu
-- **Preview & download**: in-page download progress bar (size + percentage)
-- **About modal**: attribution + GitHub link (copyright year auto-updates)
+[Preview the site online](https://bacskat.github.io/che-manuscripts/)
 
-## 技术栈 · Tech Stack
-
-- [Vite](https://vite.dev/) + [TypeScript](https://www.typescriptlang.org/)（原生，无框架 / vanilla, no framework）
-- 原生 CSS + 少量 JavaScript / Native CSS + a bit of JavaScript
-- Google Fonts: [Cormorant Garamond](https://fonts.google.com/specimen/Cormorant+Garamond) / [Ma Shan Zheng](https://fonts.google.com/specimen/Ma+Shan+Zheng)
 
 ## 快速开始 · Getting Started
 
@@ -69,6 +54,29 @@ npm run preview
     ├── modal.ts            # 关于弹窗 / About modal
     └── style.css           # 样式 / Styles
 ```
+
+## 功能特性 · Features
+
+- **加载动画**：毛笔字「致敬」逐字浮现 + 红墨从左到右填充 + 进度条
+- **随机方向揭示**：加载层朝随机方向被"抽屉式"拉出，网页从反方向连成一体滑入
+- **随机语录**：随机展示切本人说过的话（中文 + 西班牙语原版），切换时带"字符解码"特效
+- **手稿传送带**：封面无缝滚动，hover / 点击弹出「预览 / 下载」菜单
+- **预览与下载**：下载带网页内实时进度条（大小 + 百分比）
+- **关于弹窗**：版权声明 + GitHub 链接（版权年份自动更新）
+
+- **Loading animation**: brush-style "致敬" char-by-char reveal + red-ink fill + progress bar
+- **Random-direction reveal**: the loading layer is pulled out like a drawer in a random direction, the page slides in connected from the opposite side
+- **Random quotes**: real Che quotes (Chinese + Spanish), switching with a "character-decode" effect
+- **Manuscript marquee**: seamless scrolling covers with hover / tap "preview / download" menu
+- **Preview & download**: in-page download progress bar (size + percentage)
+- **About modal**: attribution + GitHub link (copyright year auto-updates)
+
+## 技术栈 · Tech Stack
+
+- [Vite](https://vite.dev/) + [TypeScript](https://www.typescriptlang.org/)（原生，无框架 / vanilla, no framework）
+- 原生 CSS + 少量 JavaScript / Native CSS + a bit of JavaScript
+- Google Fonts: [Cormorant Garamond](https://fonts.google.com/specimen/Cormorant+Garamond) / [Ma Shan Zheng](https://fonts.google.com/specimen/Ma+Shan+Zheng)
+
 
 ## 版权声明 · License & Attribution
 
