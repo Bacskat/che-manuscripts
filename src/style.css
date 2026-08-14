@@ -550,34 +550,55 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  padding: 14px;
-  background: linear-gradient(160deg, rgba(37, 6, 4, 0.9), rgba(101, 34, 28, 0.9));
+  gap: 8px;
+  padding: 12px;
+  background: linear-gradient(160deg, rgba(37, 6, 4, 0.92), rgba(101, 34, 28, 0.92));
   opacity: 0;
+  visibility: hidden;
   transform: translateY(10px);
   transition:
-    opacity 0.35s var(--ease-out),
-    transform 0.35s var(--ease-out);
+    opacity 0.3s var(--ease-out),
+    transform 0.3s var(--ease-out),
+    visibility 0.3s;
   pointer-events: none;
 }
-@media (hover: hover) {
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .card-surface,
+  .card:focus-within .card-surface {
+    transform: translateY(-8px);
+    box-shadow: 0 22px 44px rgba(37, 6, 4, 0.4);
+  }
+
   .card:hover .card-menu,
   .card:focus-within .card-menu {
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
     pointer-events: auto;
   }
 }
 
-@media (hover: none) {
-  .card.is-open .card-menu {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
+.card.is-open .card-surface {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 44px rgba(37, 6, 4, 0.4);
 }
 
-.marquee:has(.card.is-open) .marquee-track {
+.card.is-open .card-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Guard against ghost clicks on touch or closed cards */
+.card:not(.is-open):not(:hover) .card-menu,
+.card:not(.is-open):not(:hover) .card-menu * {
+  pointer-events: none !important;
+}
+
+.marquee:has(.card.is-open) .marquee-track,
+.marquee.is-card-open .marquee-track {
   animation-play-state: paused;
 }
 
@@ -585,10 +606,10 @@ body {
   appearance: none;
   display: block;
   width: 100%;
-  padding: 7px 8px;
+  padding: 6px 8px;
   font-family: var(--sans);
   font-size: 12px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-align: center;
   color: var(--paper);
   background: none;
@@ -597,8 +618,8 @@ body {
   text-decoration: none;
   cursor: pointer;
   transition:
-    background 0.3s var(--ease-out),
-    border-color 0.3s var(--ease-out);
+    background 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out);
 }
 .card-menu-item:hover {
   background: rgba(254, 254, 254, 0.14);
@@ -609,38 +630,43 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .card-submenu {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: 5px;
   max-height: 0;
   opacity: 0;
   overflow: hidden;
   transition:
-    max-height 0.3s var(--ease-out),
-    opacity 0.3s var(--ease-out);
+    max-height 0.28s var(--ease-out),
+    opacity 0.28s var(--ease-out);
 }
 .card-menu-group.is-open .card-submenu {
-  max-height: 44px;
+  max-height: 42px;
   opacity: 1;
 }
 
 .card-submenu-item {
-  padding: 5px 4px;
+  appearance: none;
+  display: block;
+  width: 100%;
+  padding: 5px 3px;
   font-family: var(--sans);
   font-size: 11px;
   letter-spacing: 0.04em;
   text-align: center;
   color: var(--paper);
+  background: none;
   text-decoration: none;
   border: 1px solid rgba(254, 254, 254, 0.28);
   border-radius: 4px;
+  cursor: pointer;
   transition:
-    background 0.3s var(--ease-out),
-    border-color 0.3s var(--ease-out);
+    background 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out);
 }
 .card-submenu-item:hover {
   background: rgba(254, 254, 254, 0.14);
@@ -665,7 +691,24 @@ body {
     top: clamp(44px, 9vh, 64px);
   }
   .card {
-    width: 160px;
+    width: 156px;
+  }
+  .card-menu {
+    padding: 10px 8px;
+    gap: 5px;
+  }
+  .card-menu-item {
+    padding: 5px 6px;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+  .card-submenu {
+    gap: 4px;
+  }
+  .card-submenu-item {
+    padding: 4px 2px;
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
   }
 }
 
@@ -788,6 +831,15 @@ body {
   place-items: center;
   background: rgba(37, 6, 4, 0.6);
   backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.35s var(--ease-out),
+    visibility 0.35s;
+}
+.dl-modal.is-open {
+  opacity: 1;
+  visibility: visible;
 }
 .dl-modal[hidden] {
   display: none;
@@ -800,6 +852,11 @@ body {
   border-radius: 8px;
   box-shadow: 0 30px 80px rgba(37, 6, 4, 0.5);
   text-align: center;
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.35s var(--ease-out);
+}
+.dl-modal.is-open .dl-panel {
+  transform: translateY(0) scale(1);
 }
 .dl-title {
   margin: 0 0 8px;

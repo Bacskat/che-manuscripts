@@ -1,19 +1,43 @@
 import { qs } from './shared'
 
 const aboutModal = qs('#about-modal')
+let closeTimeout: number | null = null
+let previouslyFocusedElement: HTMLElement | null = null
 
 export function openAbout() {
   if (!aboutModal) return
+
+  if (closeTimeout !== null) {
+    window.clearTimeout(closeTimeout)
+    closeTimeout = null
+  }
+
+  previouslyFocusedElement = document.activeElement as HTMLElement | null
+
   aboutModal.hidden = false
+  aboutModal.setAttribute('aria-hidden', 'false')
   void aboutModal.offsetHeight // flush layout so the fade-in actually animates
   aboutModal.classList.add('is-open')
+
+  // Focus close button for accessibility
+  const closeBtn = aboutModal.querySelector<HTMLElement>('.modal-close')
+  closeBtn?.focus()
 }
 
-function closeAbout() {
-  if (!aboutModal) return
+export function closeAbout() {
+  if (!aboutModal || !aboutModal.classList.contains('is-open')) return
+
   aboutModal.classList.remove('is-open')
-  window.setTimeout(() => {
+  aboutModal.setAttribute('aria-hidden', 'true')
+
+  if (closeTimeout !== null) {
+    window.clearTimeout(closeTimeout)
+  }
+
+  closeTimeout = window.setTimeout(() => {
     aboutModal.hidden = true
+    closeTimeout = null
+    previouslyFocusedElement?.focus()
   }, 400)
 }
 
@@ -32,3 +56,4 @@ export function initModal() {
   const yearEl = qs('#copyright-year')
   if (yearEl) yearEl.textContent = String(new Date().getFullYear())
 }
+

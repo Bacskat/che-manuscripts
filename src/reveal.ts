@@ -31,7 +31,10 @@ function reveal() {
   requestAnimationFrame(() => {
     loader?.classList.add('is-done')
     hero?.classList.add('is-revealed')
-    window.setTimeout(() => hero?.classList.add('is-settled'), SETTLE_DELAY_MS)
+    window.setTimeout(() => {
+      hero?.classList.add('is-settled')
+      if (loader) loader.hidden = true
+    }, SETTLE_DELAY_MS)
   })
 }
 

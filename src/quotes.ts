@@ -3,11 +3,21 @@ import { QUOTES } from './data'
 
 const quoteEl = qs('.quote')
 const quoteEsEl = qs('.quote-es')
+const quoteBlock = qs('.quote-block')
+
+let animFrameId: number | null = null
+let currentQuote = 0
+const PUNCTUATION_REGEX = /[，。！？、：；“”‘’\s\u3000-\u303F]/
 
 function scrambleTo(text: string) {
   if (!quoteEl) return
+  if (animFrameId !== null) {
+    cancelAnimationFrame(animFrameId)
+    animFrameId = null
+  }
+
   const chars = Array.from(text)
-  const frames = 28
+  const frames = 26
   let frame = 0
   quoteEl.classList.add('scrambling')
 
@@ -17,14 +27,17 @@ function scrambleTo(text: string) {
     quoteEl.textContent = chars
       .map((ch, i) => {
         // lock chars left-to-right; keep punctuation and spaces intact from the start
-        if (i < locked || ch === ' ' || ch === '，' || ch === '。') return ch
+        if (i < locked || PUNCTUATION_REGEX.test(ch)) return ch
         return randomHanzi()
       })
       .join('')
-    if (frame < frames) requestAnimationFrame(tick)
-    else {
+
+    if (frame < frames) {
+      animFrameId = requestAnimationFrame(tick)
+    } else {
       quoteEl.textContent = text
       quoteEl.classList.remove('scrambling')
+      animFrameId = null
     }
   }
   tick()
@@ -39,11 +52,9 @@ function setSpanish(text: string) {
   }, 220)
 }
 
-let currentQuote = -1
-
 function showRandomQuote() {
   let next = Math.floor(Math.random() * QUOTES.length)
-  if (next === currentQuote) next = (next + 1) % QUOTES.length // don't repeat the same one twice in a row
+  if (next === currentQuote) next = (next + 1) % QUOTES.length
   currentQuote = next
   const { zh, es } = QUOTES[next]
   scrambleTo(zh)
@@ -51,6 +62,12 @@ function showRandomQuote() {
 }
 
 export function initQuotes() {
-  showRandomQuote()
-  setInterval(showRandomQuote, 7000)
+  // Allow clicking on quote block to cycle quotes interactively
+  quoteBlock?.addEventListener('click', () => {
+    showRandomQuote()
+  })
+
+  // Start cycling after initial hero reveal has settled
+  setInterval(showRandomQuote, 7500)
 }
+
