@@ -1,4 +1,5 @@
 import { formatSize, qs } from './shared'
+import { t } from './i18n'
 
 let isDownloading = false
 
@@ -21,7 +22,7 @@ export async function downloadFile(url: string) {
   modal.classList.add('is-open')
 
   if (nameEl) nameEl.textContent = filename
-  sizeEl.textContent = '连接中…'
+  sizeEl.textContent = t('dlConnecting')
   percentEl.textContent = '0%'
   fillEl.style.width = '0%'
 
@@ -65,7 +66,7 @@ export async function downloadFile(url: string) {
     } else {
       fillEl.style.width = '50%'
       percentEl.textContent = '…'
-      sizeEl.textContent = '下载中…'
+      sizeEl.textContent = t('dlDownloading')
       blob = await response.blob()
       loaded = blob.size
       fillEl.style.width = '100%'
@@ -83,10 +84,10 @@ export async function downloadFile(url: string) {
     window.setTimeout(() => URL.revokeObjectURL(objectUrl), 10000)
 
     percentEl.textContent = '100%'
-    sizeEl.textContent = `完成 · ${formatSize(loaded)}`
+    sizeEl.textContent = `${t('dlComplete')} · ${formatSize(loaded)}`
     hideModal(900)
   } catch {
-    sizeEl.textContent = '下载失败，请重试'
+    sizeEl.textContent = t('dlFailed')
     percentEl.textContent = '×'
     hideModal(1800)
   }

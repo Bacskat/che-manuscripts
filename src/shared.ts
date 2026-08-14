@@ -2,11 +2,12 @@
 
 export interface Quote {
   zh: string
+  en: string
   es: string
 }
 
 export interface Manuscript {
-  label: string
+  id: 'manuscript1966' | 'manuscript1967' | 'manuscriptEvaluaciones'
   href: string
 }
 

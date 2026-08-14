@@ -54,17 +54,17 @@
       </div>
 
       <div class="hero-content">
-        <p class="eyebrow">Ernesto Guevara · 1928 — 1967</p>
-        <h1 class="title">切 · 格瓦拉</h1>
-        <p class="side">Hasta la victoria, siempre</p>
+        <p class="eyebrow" data-i18n="heroEyebrow">Ernesto Guevara · 1928 — 1967</p>
+        <h1 class="title" data-i18n="heroTitle">切 · 格瓦拉</h1>
+        <p class="side" data-i18n="heroSide">Hasta la victoria, siempre</p>
         <div class="quote-block">
           <p class="quote">被伟大的爱所引导的，才是真正的革命者。</p>
           <p class="quote-es">El verdadero revolucionario es guiado por grandes sentimientos de amor.</p>
         </div>
       </div>
 
-      <div class="marquee" aria-label="手稿封面滚动列表">
-        <p class="marquee-label">手稿 · Manuscripts</p>
+      <div class="marquee" aria-label="手稿封面滚动列表" data-i18n-aria="marqueeLabel">
+        <p class="marquee-label" data-i18n="marqueeLabel">手稿 · Manuscripts</p>
         <div class="marquee-track"></div>
       </div>
     </main>
@@ -72,16 +72,16 @@
     <div id="about-modal" class="modal" aria-hidden="true" hidden>
       <div class="modal-backdrop" data-close></div>
       <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="about-title">
-        <button class="modal-close" type="button" data-close aria-label="关闭">×</button>
+        <button class="modal-close" type="button" data-close aria-label="关闭" data-i18n-aria="aboutClose">×</button>
         <span class="modal-mark" aria-hidden="true">★</span>
-        <h2 class="modal-title" id="about-title">关于 · About</h2>
+        <h2 class="modal-title" id="about-title" data-i18n="aboutTitle">关于 · About</h2>
         <div class="modal-body">
-          <p>本站为向<span style="color: #8d3423;">切·格瓦拉</span><span style="color: #bb270a;">同志</span>致敬而建。</p>
-          <p>所用手稿图片及资料，版权归其原始权利人 / 收藏机构所有；本站仅作学习、研究与纪念之用，不用于任何商业用途。</p>
+          <p data-i18n="aboutBody1" data-i18n-html>本站为向<span style="color: #8d3423;">切·格瓦拉</span><span style="color: #bb270a;">同志</span>致敬而建。</p>
+          <p data-i18n="aboutBody2">所用手稿图片及资料，版权归其原始权利人 / 收藏机构所有；本站仅作学习、研究与纪念之用，不用于任何商业用途。</p>
           <div class="modal-footer">
             <a class="modal-copy" href="https://proplusmax.com" target="_blank" rel="noopener">© 2025-<span id="copyright-year">2026</span> ProPlusMax.com</a>
             <a class="modal-github" href="https://github.com/bacskat/che-manuscripts" target="_blank" rel="noopener">
-              <span>全部源代码及资料在GitHub上</span>
+              <span data-i18n="aboutSourceGithub">全部源代码及资料在GitHub上</span>
               <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
               </svg>
@@ -93,7 +93,7 @@
 
     <div id="download-modal" class="dl-modal" hidden>
       <div class="dl-panel" role="dialog" aria-modal="true" aria-label="下载进度">
-        <p class="dl-title">下载中 · Downloading</p>
+        <p class="dl-title" data-i18n="dlTitle">下载中 · Downloading</p>
         <p class="dl-name" id="dl-name"></p>
         <div class="dl-bar"><div class="dl-fill" id="dl-fill"></div></div>
         <p class="dl-info">

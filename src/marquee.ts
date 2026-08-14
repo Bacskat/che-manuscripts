@@ -2,6 +2,7 @@ import { qs, shuffle, type Manuscript } from './shared'
 import { MANUSCRIPTS, MANUSCRIPT_COVERS } from './data'
 import { openAbout } from './modal'
 import { downloadFile } from './download'
+import { t, setLanguage, getLanguage, onLanguageChange, type Lang } from './i18n'
 
 const marqueeEl = qs('.marquee')
 const track = qs('.marquee-track')
@@ -10,7 +11,6 @@ export function closeAllCards() {
   const openCards = document.querySelectorAll<HTMLElement>('.card.is-open')
   openCards.forEach((card) => {
     card.classList.remove('is-open')
-    // Reset all submenus inside closed cards
     card.querySelectorAll<HTMLElement>('.card-menu-group.is-open').forEach((g) => {
       g.classList.remove('is-open')
     })
@@ -30,12 +30,13 @@ function buildManuscriptGroup(manuscript: Manuscript, menu: HTMLElement): HTMLEl
 
   const toggle = document.createElement('button')
   toggle.type = 'button'
-  toggle.className = 'card-menu-item'
-  toggle.textContent = manuscript.label
+  toggle.className = 'card-menu-item item-toggle'
+  toggle.textContent = t(manuscript.id)
+  toggle.dataset.i18nKey = manuscript.id
   toggle.addEventListener('click', (e) => {
     e.stopPropagation()
     const willOpen = !group.classList.contains('is-open')
-    // only one submenu open at a time, otherwise the card overflows
+    // only one submenu open at a time
     menu
       .querySelectorAll<HTMLElement>('.card-menu-group.is-open')
       .forEach((g) => g.classList.remove('is-open'))
@@ -46,19 +47,21 @@ function buildManuscriptGroup(manuscript: Manuscript, menu: HTMLElement): HTMLEl
   submenu.className = 'card-submenu'
 
   const preview = document.createElement('a')
-  preview.className = 'card-submenu-item'
+  preview.className = 'card-submenu-item item-preview'
   preview.href = manuscript.href
   preview.target = '_blank'
   preview.rel = 'noopener'
-  preview.textContent = '预览'
+  preview.textContent = t('btnPreview')
+  preview.dataset.i18nKey = 'btnPreview'
   preview.addEventListener('click', (e) => {
     e.stopPropagation()
   })
 
   const download = document.createElement('button')
   download.type = 'button'
-  download.className = 'card-submenu-item'
-  download.textContent = '下载'
+  download.className = 'card-submenu-item item-download'
+  download.textContent = t('btnDownload')
+  download.dataset.i18nKey = 'btnDownload'
   download.addEventListener('click', (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -70,6 +73,33 @@ function buildManuscriptGroup(manuscript: Manuscript, menu: HTMLElement): HTMLEl
   return group
 }
 
+function buildLangPicker(): HTMLElement {
+  const picker = document.createElement('div')
+  picker.className = 'card-lang-picker'
+
+  const langs: { id: Lang; label: string }[] = [
+    { id: 'zh', label: '中' },
+    { id: 'en', label: 'EN' },
+    { id: 'es', label: 'ES' },
+  ]
+
+  for (const lang of langs) {
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = `lang-btn${getLanguage() === lang.id ? ' is-active' : ''}`
+    btn.textContent = lang.label
+    btn.dataset.lang = lang.id
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      setLanguage(lang.id)
+      btn.blur() // Release focus immediately so :focus-within does not stick
+    })
+    picker.appendChild(btn)
+  }
+
+  return picker
+}
+
 function buildCard(src: string): HTMLElement {
   const card = document.createElement('article')
   card.className = 'card'
@@ -79,7 +109,8 @@ function buildCard(src: string): HTMLElement {
 
   const img = document.createElement('img')
   img.src = src
-  img.alt = '切·格瓦拉手稿封面'
+  img.alt = t('coverAlt')
+  img.dataset.i18nKey = 'coverAlt'
   img.loading = 'lazy'
   img.draggable = false
 
@@ -92,13 +123,18 @@ function buildCard(src: string): HTMLElement {
 
   const aboutBtn = document.createElement('button')
   aboutBtn.type = 'button'
-  aboutBtn.className = 'card-menu-item'
-  aboutBtn.textContent = 'about / 关于'
+  aboutBtn.className = 'card-menu-item item-about'
+  aboutBtn.textContent = t('btnAbout')
+  aboutBtn.dataset.i18nKey = 'btnAbout'
   aboutBtn.addEventListener('click', (e) => {
     e.stopPropagation()
+    aboutBtn.blur()
     openAbout()
   })
   menu.appendChild(aboutBtn)
+
+  // Language switcher below about button
+  menu.appendChild(buildLangPicker())
 
   surface.append(img, menu)
   card.appendChild(surface)
@@ -106,8 +142,8 @@ function buildCard(src: string): HTMLElement {
   // Card click / tap interaction
   card.addEventListener('click', (e) => {
     const target = e.target as HTMLElement | null
-    // If click happened on an interactive button/link inside an already-open menu, let its own handler execute
-    if (target?.closest('.card-menu-item, .card-submenu-item')) {
+    // If click happened on an interactive element inside menu, let its own handler execute
+    if (target?.closest('.card-menu-item, .card-submenu-item, .lang-btn')) {
       return
     }
 
@@ -121,8 +157,19 @@ function buildCard(src: string): HTMLElement {
     }
   })
 
-  // On desktop mouseleave: reset any expanded submenu so next hover is clean
+  // On desktop mouseenter: clear any lingering activeElement outside this card
+  card.addEventListener('mouseenter', () => {
+    if (document.activeElement instanceof HTMLElement && !card.contains(document.activeElement)) {
+      document.activeElement.blur()
+    }
+  })
+
+  // On desktop mouseleave: blur internal buttons and reset expanded submenus
   card.addEventListener('mouseleave', () => {
+    if (card.contains(document.activeElement) && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+
     if (!card.classList.contains('is-open')) {
       card.querySelectorAll<HTMLElement>('.card-menu-group.is-open').forEach((g) => {
         g.classList.remove('is-open')
@@ -131,6 +178,27 @@ function buildCard(src: string): HTMLElement {
   })
 
   return card
+}
+
+function updateCardTexts() {
+  const current = getLanguage()
+
+  // Update text for all i18n items in all cards
+  document.querySelectorAll<HTMLElement>('.card [data-i18n-key]').forEach((el) => {
+    const key = el.dataset.i18nKey as keyof typeof t extends (k: infer K) => string ? K : never
+    if (key) {
+      if (el instanceof HTMLImageElement) {
+        el.alt = t(key as any)
+      } else {
+        el.textContent = t(key as any)
+      }
+    }
+  })
+
+  // Update active state of language buttons across all cards
+  document.querySelectorAll<HTMLElement>('.lang-btn').forEach((btn) => {
+    btn.classList.toggle('is-active', btn.dataset.lang === current)
+  })
 }
 
 function buildGroup(): HTMLElement {
@@ -148,6 +216,11 @@ export function initMarquee() {
     track.append(buildGroup(), buildGroup())
   }
 
+  // Listen for language changes and update card labels
+  onLanguageChange(() => {
+    updateCardTexts()
+  })
+
   // tap anywhere outside a card to dismiss the open menu
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement | null
@@ -163,4 +236,5 @@ export function initMarquee() {
     }
   })
 }
+
 
